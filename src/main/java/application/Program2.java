@@ -31,6 +31,12 @@ public class Program2 {
         System.out.println("Inserted! New Id: " + dep.getId());
         System.out.println();
 
+        System.out.println("=== TEST 4: Department update ===");
+        dep = departmentDao.findById(6);
+        dep.setName("Network management");
+        departmentDao.update(dep);
+        System.out.println("Update completed!");
+        System.out.println();
 
         kb.close();
     }
