@@ -38,6 +38,13 @@ public class Program2 {
         System.out.println("Update completed!");
         System.out.println();
 
+        System.out.println("=== TEST 5: Department deleteById ===");
+        System.out.println("Enter if for delete test: ");
+        int id = kb.nextInt();
+        departmentDao.deleteById(id);
+        System.out.println("Delete completed!");
+        System.out.println();
+
         kb.close();
     }
 }
