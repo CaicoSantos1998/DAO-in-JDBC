@@ -6,6 +6,8 @@ import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Program2 {
@@ -18,7 +20,10 @@ public class Program2 {
         System.out.println(dep);
         System.out.println();
 
-
+        System.out.println("=== TEST 2: Department findAll ===");
+        List<Department> list = departmentDao.findAll();
+        list.forEach(System.out::println);
+        System.out.println();
 
         kb.close();
     }
