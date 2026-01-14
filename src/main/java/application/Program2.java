@@ -27,28 +27,27 @@ public class Program2 {
         list.forEach(System.out::println);
         System.out.println();*/
 
-        System.out.println("=== TEST 3: Department insert ===");
+        /*System.out.println("=== TEST 3: Department insert ===");
         dep = new Department(null, "Test");
         departmentService.insert(dep);
         System.out.println("Inserted! New Id: " + dep.getId());
-        System.out.println();
+        System.out.println();*/
 
         /*System.out.println("=== TEST 4: Department update ===");
         dep = departmentService.findById(6);
         dep.setName("Network management");
         departmentService.update(dep);
         System.out.println("Update completed!");
-        System.out.println();
+        System.out.println();*/
 
         System.out.println("=== TEST 5: Department deleteById ===");
         System.out.println("Enter if for delete test: ");
         int id = kb.nextInt();
         departmentService.deleteById(id);
-        System.out.println("Delete completed!");
-        System.out.println();*/
+        System.out.println();
 
 
-        DB.closeConnection();
+        DB.closePool();
         kb.close();
     }
 }

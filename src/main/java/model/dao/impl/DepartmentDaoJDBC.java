@@ -54,11 +54,11 @@ public class DepartmentDaoJDBC implements DepartmentDao {
         String sql = "DELETE FROM department WHERE Id = ?";
         try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, id);
-            int rows = pst.executeUpdate();
-            if(rows==0) {
-                throw new DbException("Id not exist!");
-            }
+            pst.executeUpdate();
         } catch (SQLException e) {
+            if(e.getErrorCode() == 1451) {
+                throw new DbException("Cannot be deleted: This department has linked sellers");
+            }
             throw new DbException(e.getMessage());
         }
     }

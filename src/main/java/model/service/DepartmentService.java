@@ -2,6 +2,7 @@ package model.service;
 
 import db.DB;
 import db.DbException;
+import db.DbIntegrityException;
 import model.dao.DaoFactory;
 import model.dao.DepartmentDao;
 import model.entities.Department;
@@ -11,8 +12,13 @@ import java.util.List;
 
 public class DepartmentService {
 
-    private Connection conn = DB.getConnection();
-    private DepartmentDao dao = DaoFactory.createDepartmentDao(conn);
+    private DepartmentDao dao;
+    private Connection conn;
+
+    public DepartmentService() {
+        this.conn = DB.getConnection();
+        this.dao = DaoFactory.createDepartmentDao(conn);
+    }
 
     public void insert(Department department) {
         try {
@@ -44,9 +50,9 @@ public class DepartmentService {
             dao.deleteById(id);
             DB.commit(conn);
             System.out.println("Done!");
-        } catch (DbException e) {
+        } catch (DbIntegrityException e) {
             DB.rollback(conn);
-            System.out.println("Error to delete department: " + e.getMessage());
+            throw e;
         }
     }
 

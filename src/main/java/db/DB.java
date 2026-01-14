@@ -103,4 +103,10 @@ public class DB {
             throw new DbException("Error to rollback transaction: " + e.getMessage());
         }
     }
+
+    public static void closePool() {
+        if (hds!=null && !hds.isClosed()) {
+            hds.close();
+        }
+    }
 }
