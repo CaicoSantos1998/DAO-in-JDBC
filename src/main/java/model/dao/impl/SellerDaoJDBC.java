@@ -22,9 +22,8 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void insert(Seller seller) {
-        try (PreparedStatement pst = conn.prepareStatement(
-                "INSERT INTO seller (Name, Email, BirthDate, BaseSalary, DepartmentId) " +
-                        "VALUES (?, ? ,? ,? ,?)", Statement.RETURN_GENERATED_KEYS)) {
+        String sql = "INSERT INTO seller (Name, Email, BirthDate, BaseSalary, DepartmentId) VALUES (?, ? ,? ,? ,?)";
+        try (PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pst.setString(1, seller.getName());
             pst.setString(2, seller.getEmail());
             pst.setDate(3, new java.sql.Date(seller.getBirthDate().getTime()));
@@ -49,10 +48,8 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void update(Seller seller) {
-        try (PreparedStatement pst = conn.prepareStatement(
-                "UPDATE seller " +
-                "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? " +
-                "WHERE Id = ?")) {
+        String sql = "UPDATE seller SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? WHERE Id = ?";
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setString(1 , seller.getName());
             pst.setString(2 , seller.getEmail());
             pst.setDate(3 , new java.sql.Date(seller.getBirthDate().getTime()));
@@ -67,9 +64,8 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void deleteById(Integer id) {
-        try (PreparedStatement pst = conn.prepareStatement(
-                "DELETE FROM seller " +
-                "WHERE Id = ?")) {
+        String sql = "DELETE FROM seller WHERE Id = ?";
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, id);
             int rows = pst.executeUpdate();
             if(rows == 0) {
@@ -82,11 +78,8 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public Seller findById(Integer id) {
-        try (PreparedStatement pst = conn.prepareStatement(
-                "SELECT seller.*, department.Name AS DpName " +
-                "FROM seller INNER JOIN department " +
-                "ON seller.DepartmentId = department.Id " +
-                "WHERE seller.Id = ?");
+        String sql = "SELECT seller.*, department.Name AS DpName FROM seller INNER JOIN department ON seller.DepartmentId = department.Id WHERE seller.Id = ?";
+        try (PreparedStatement pst = conn.prepareStatement(sql);
         ResultSet rs = pst.executeQuery()) {
             pst.setInt(1, id);
             if(rs.next()) {
@@ -102,11 +95,8 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public List<Seller> findAll() {
-        try (PreparedStatement pst = conn.prepareStatement(
-                "SELECT seller.*, department.Name AS DpName " +
-                "FROM seller INNER JOIN department " +
-                "ON seller.DepartmentId = department.Id " +
-                "ORDER BY Name");
+        String sql = "SELECT seller.*, department.Name AS DpName FROM seller INNER JOIN department ON seller.DepartmentId = department.Id ORDER BY Name";
+        try (PreparedStatement pst = conn.prepareStatement(sql);
         ResultSet rs = pst.executeQuery()) {
             List<Seller> list = new ArrayList<>();
             Map<Integer, Department> map = new HashMap<>();
@@ -127,12 +117,8 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public List<Seller> findByDepartment(Department department) {
-        try (PreparedStatement pst = conn.prepareStatement(
-                "SELECT seller.*, department.Name AS DpName " +
-                "FROM seller INNER JOIN department " +
-                "ON seller.DepartmentId = department.Id " +
-                "WHERE DepartmentId = ? " +
-                "ORDER BY Name");
+        String sql = "SELECT seller.*, department.Name AS DpName FROM seller INNER JOIN department ON seller.DepartmentId = department.Id WHERE Department = ? ORDER BY Name";
+        try (PreparedStatement pst = conn.prepareStatement(sql);
         ResultSet rs = pst.executeQuery()) {
             pst.setInt(1, department.getId());
             List<Seller> list = new ArrayList<>();

@@ -18,7 +18,8 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
     @Override
     public void insert(Department depart) {
-        try (PreparedStatement pst = conn.prepareStatement("INSERT INTO department (Name) VALUES (?)", Statement.RETURN_GENERATED_KEYS)) {
+        String sql = "INSERT INTO department (Name) VALUES (?)";
+        try (PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pst.setString(1, depart.getName());
             int rowsAffected = pst.executeUpdate();
             if(rowsAffected>0) {
@@ -38,7 +39,8 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
     @Override
     public void update(Department depart) {
-        try (PreparedStatement pst = conn.prepareStatement("UPDATE department SET Name = ? WHERE id = ?")){
+        String sql = "UPDATE department SET Name = ? WHERE id = ?";
+        try (PreparedStatement pst = conn.prepareStatement(sql)){
             pst.setString(1, depart.getName());
             pst.setInt(2, depart.getId());
             pst.executeUpdate();
@@ -49,7 +51,8 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
     @Override
     public void deleteById(Integer id) {
-        try (PreparedStatement pst = conn.prepareStatement("DELETE FROM department WHERE Id = ?")) {
+        String sql = "DELETE FROM department WHERE Id = ?";
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, id);
             int rows = pst.executeUpdate();
             if(rows==0) {
@@ -62,7 +65,8 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
     @Override
     public Department findById(Integer id) {
-        try (PreparedStatement pst = conn.prepareStatement("SELECT * FROM department WHERE id = ?");
+        String sql = "SELECT * FROM department WHERE id = ?";
+        try (PreparedStatement pst = conn.prepareStatement(sql);
         ResultSet rs = pst.executeQuery()) {
             pst.setInt(1, id);
             if(rs.next()) {
@@ -79,7 +83,8 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
     @Override
     public List<Department> findAll() {
-        try (PreparedStatement pst = conn.prepareStatement("SELECT * FROM department ORDER BY Name");
+        String sql = "SELECT * FROM department ORDER BY Name";
+        try (PreparedStatement pst = conn.prepareStatement(sql);
         ResultSet rs = pst.executeQuery()) {
             List<Department> list = new ArrayList<>();
             while (rs.next()) {
