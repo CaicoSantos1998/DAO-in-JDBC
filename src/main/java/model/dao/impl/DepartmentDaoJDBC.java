@@ -40,7 +40,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
     @Override
     public void update(Department depart) {
         String sql = "UPDATE department SET Name = ? WHERE id = ?";
-        try (PreparedStatement pst = conn.prepareStatement(sql)){
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setString(1, depart.getName());
             pst.setInt(2, depart.getId());
             pst.executeUpdate();
@@ -66,14 +66,15 @@ public class DepartmentDaoJDBC implements DepartmentDao {
     @Override
     public Department findById(Integer id) {
         String sql = "SELECT * FROM department WHERE id = ?";
-        try (PreparedStatement pst = conn.prepareStatement(sql);
-        ResultSet rs = pst.executeQuery()) {
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, id);
-            if(rs.next()) {
-                Department dep = new Department();
-                dep.setId(rs.getInt("Id"));
-                dep.setName(rs.getString("Name"));
-                return dep;
+            try (ResultSet rs = pst.executeQuery()){
+                if(rs.next()) {
+                    Department dep = new Department();
+                    dep.setId(rs.getInt("Id"));
+                    dep.setName(rs.getString("Name"));
+                    return dep;
+                }
             }
             return null;
         } catch (SQLException e) {
@@ -84,14 +85,15 @@ public class DepartmentDaoJDBC implements DepartmentDao {
     @Override
     public List<Department> findAll() {
         String sql = "SELECT * FROM department ORDER BY Name";
-        try (PreparedStatement pst = conn.prepareStatement(sql);
-        ResultSet rs = pst.executeQuery()) {
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
             List<Department> list = new ArrayList<>();
-            while (rs.next()) {
-                Department dep = new Department();
-                dep.setId(rs.getInt("Id"));
-                dep.setName(rs.getString("Name"));
-                list.add(dep);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Department dep = new Department();
+                    dep.setId(rs.getInt("Id"));
+                    dep.setName(rs.getString("Name"));
+                    list.add(dep);
+                }
             }
             return list;
         } catch (SQLException e) {

@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
 
@@ -45,10 +46,13 @@ public class DB {
     }
 
     private static Properties loadProperties() {
-        try (FileInputStream fis = new FileInputStream("db.properties")) {
-            Properties properties = new Properties();
-            properties.load(fis);
-            return properties;
+        try (InputStream is = DB.class.getClassLoader().getResourceAsStream("db.properties")) {
+            if(is==null) {
+                throw new DbException("File db.properties not found in resources!");
+            }
+            Properties props = new Properties();
+            props.load(is);
+            return props;
         } catch (IOException e) {
             throw new DbException(e.getMessage());
         }

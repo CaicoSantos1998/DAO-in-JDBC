@@ -10,3 +10,5 @@
 /home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/model/dao/impl/SellerDaoJDBC.java
 /home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/model/entities/Department.java
 /home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/model/entities/Seller.java
+/home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/model/service/DepartmentService.java
+/home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/model/service/SellerService.java
