@@ -1,33 +1,46 @@
 package db;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
 public class DB {
-    private static Connection connection = null;
+    private static HikariDataSource hds;
 
     public static Connection getConnection() {
-        if(connection==null) {
-            try {
-                Properties properties = loadProperties();
-                String url = properties.getProperty("dburl");
-                connection = DriverManager.getConnection(url, properties);
-            } catch (SQLException e) {
-                throw new DbException(e.getMessage());
-            }
+        if(hds==null) {
+            Properties props = loadProperties();
+            HikariConfig hConfig = new HikariConfig();
+
+            hConfig.setJdbcUrl(props.getProperty("dburl"));
+            hConfig.setUsername(props.getProperty("user"));
+            hConfig.setPassword(props.getProperty("password"));
+
+            hConfig.setMaximumPoolSize(5);
+            hConfig.setMinimumIdle(2);
+            hConfig.setIdleTimeout(150000);
+            hConfig.setConnectionTimeout(30000);
+
+            hConfig.addDataSourceProperty("cachePrepStmts", "true");
+            hConfig.addDataSourceProperty("prepStmtCacheSize", "250");
+            hConfig.addDataSourceProperty("prepStmtCacheqlLimit", "2048");
+
+            hds = new HikariDataSource(hConfig);
         }
-        return connection;
+        try {
+            return hds.getConnection();
+        } catch (SQLException e) {
+            throw new DbException("Error connection: " + e.getMessage());
+        }
     }
 
     public static void closeConnection() {
-        if(connection!=null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                throw new DbException(e.getMessage());
-            }
+        if(hds!=null){
+            hds.close();
         }
     }
 
