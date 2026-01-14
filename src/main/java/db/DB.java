@@ -73,4 +73,30 @@ public class DB {
             }
         }
     }
+
+    public static void beginTransaction(Connection conn) {
+        try {
+            conn.setAutoCommit(false);
+        } catch (SQLException e) {
+            throw new DbException("Error start transaction: " + e.getMessage());
+        }
+    }
+
+    public static void commit(Connection conn) {
+        try {
+            conn.commit();
+            conn.setAutoCommit(true);
+        } catch (SQLException e) {
+            throw new DbException("Error to confirm transaction: " + e.getMessage());
+        }
+    }
+
+    public static void rollback(Connection conn) {
+        try {
+            conn.rollback();
+            conn.setAutoCommit(true);
+        } catch (SQLException e) {
+            throw new DbException("Error to rollback transaction: " + e.getMessage());
+        }
+    }
 }
