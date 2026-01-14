@@ -22,12 +22,9 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void insert(Seller seller) {
-        PreparedStatement pst = null;
-        try {
-            pst = conn.prepareStatement(
-                    "INSERT INTO seller (Name, Email, BirthDate, BaseSalary, DepartmentId) VALUES " +
-                            "(?, ? ,? ,? ,?)", Statement.RETURN_GENERATED_KEYS
-            );
+        try (PreparedStatement pst = conn.prepareStatement(
+                "INSERT INTO seller (Name, Email, BirthDate, BaseSalary, DepartmentId) " +
+                        "VALUES (?, ? ,? ,? ,?)", Statement.RETURN_GENERATED_KEYS)) {
             pst.setString(1, seller.getName());
             pst.setString(2, seller.getEmail());
             pst.setDate(3, new java.sql.Date(seller.getBirthDate().getTime()));
@@ -35,7 +32,6 @@ public class SellerDaoJDBC implements SellerDao {
             pst.setInt(5, seller.getDepartment().getId());
 
             int rowsAffected = pst.executeUpdate();
-
             if(rowsAffected>0) {
                 ResultSet rs = pst.getGeneratedKeys();
                 if(rs.next()) {
@@ -48,69 +44,51 @@ public class SellerDaoJDBC implements SellerDao {
             }
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
-        } finally {
-            DB.closeStatement(pst);
         }
     }
 
     @Override
     public void update(Seller seller) {
-        PreparedStatement pst = null;
-        try {
-            pst = conn.prepareStatement(
-                    "UPDATE seller " +
-                            "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? " +
-                            "WHERE Id = ?"
-            );
+        try (PreparedStatement pst = conn.prepareStatement(
+                "UPDATE seller " +
+                "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? " +
+                "WHERE Id = ?")) {
             pst.setString(1 , seller.getName());
             pst.setString(2 , seller.getEmail());
             pst.setDate(3 , new java.sql.Date(seller.getBirthDate().getTime()));
             pst.setDouble(4 , seller.getBaseSalary());
             pst.setInt(5 , seller.getDepartment().getId());
             pst.setInt(6, seller.getId());
-
             pst.executeUpdate();
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
-        } finally {
-            DB.closeStatement(pst);
         }
     }
 
     @Override
     public void deleteById(Integer id) {
-        PreparedStatement pst = null;
-        try {
-            pst = conn.prepareStatement(
-                    "DELETE FROM seller " +
-                        "WHERE Id = ?"
-            );
+        try (PreparedStatement pst = conn.prepareStatement(
+                "DELETE FROM seller " +
+                "WHERE Id = ?")) {
             pst.setInt(1, id);
             int rows = pst.executeUpdate();
-
             if(rows == 0) {
                 throw new DbException("Id not exists!");
             }
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
-        } finally {
-            DB.closeStatement(pst);
         }
     }
 
     @Override
     public Seller findById(Integer id) {
-        PreparedStatement pst = null;
-        ResultSet rs = null;
-        try {
-            pst = conn.prepareStatement(
-                    "SELECT seller.*, department.Name AS DpName " +
-                            "FROM seller INNER JOIN department " +
-                            "ON seller.DepartmentId = department.Id " +
-                            "WHERE seller.Id = ?"
-            );
+        try (PreparedStatement pst = conn.prepareStatement(
+                "SELECT seller.*, department.Name AS DpName " +
+                "FROM seller INNER JOIN department " +
+                "ON seller.DepartmentId = department.Id " +
+                "WHERE seller.Id = ?");
+        ResultSet rs = pst.executeQuery()) {
             pst.setInt(1, id);
-            rs = pst.executeQuery();
             if(rs.next()) {
                 Department dep = instantiateDepartment(rs);
                 Seller seller = instantiateSeller(rs, dep);
@@ -119,24 +97,17 @@ public class SellerDaoJDBC implements SellerDao {
             return null;
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
-        } finally {
-            DB.closeStatement(pst);
-            DB.closeResultSet(rs);
         }
     }
 
     @Override
     public List<Seller> findAll() {
-        PreparedStatement pst = null;
-        ResultSet rs = null;
-        try {
-            pst = conn.prepareStatement(
-                    "SELECT seller.*, department.Name AS DpName " +
-                        "FROM seller INNER JOIN department " +
-                        "ON seller.DepartmentId = department.Id " +
-                        "ORDER BY Name"
-            );
-            rs = pst.executeQuery();
+        try (PreparedStatement pst = conn.prepareStatement(
+                "SELECT seller.*, department.Name AS DpName " +
+                "FROM seller INNER JOIN department " +
+                "ON seller.DepartmentId = department.Id " +
+                "ORDER BY Name");
+        ResultSet rs = pst.executeQuery()) {
             List<Seller> list = new ArrayList<>();
             Map<Integer, Department> map = new HashMap<>();
             while (rs.next()) {
@@ -151,27 +122,19 @@ public class SellerDaoJDBC implements SellerDao {
             return list;
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
-        } finally {
-            DB.closeStatement(pst);
-            DB.closeResultSet(rs);
         }
     }
 
     @Override
     public List<Seller> findByDepartment(Department department) {
-        PreparedStatement pst = null;
-        ResultSet rs = null;
-        try {
-            pst = conn.prepareStatement(
-                    "SELECT seller.*, department.Name AS DpName " +
-                            "FROM seller INNER JOIN department " +
-                            "ON seller.DepartmentId = department.Id " +
-                            "WHERE DepartmentId = ? " +
-                            "ORDER BY Name"
-            );
+        try (PreparedStatement pst = conn.prepareStatement(
+                "SELECT seller.*, department.Name AS DpName " +
+                "FROM seller INNER JOIN department " +
+                "ON seller.DepartmentId = department.Id " +
+                "WHERE DepartmentId = ? " +
+                "ORDER BY Name");
+        ResultSet rs = pst.executeQuery()) {
             pst.setInt(1, department.getId());
-            rs = pst.executeQuery();
-
             List<Seller> list = new ArrayList<>();
             Map<Integer, Department> map = new HashMap<>();
             while(rs.next()) {
@@ -186,9 +149,6 @@ public class SellerDaoJDBC implements SellerDao {
             return list;
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
-        } finally {
-            DB.closeStatement(pst);
-            DB.closeResultSet(rs);
         }
     }
 
