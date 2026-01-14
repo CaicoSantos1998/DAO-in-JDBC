@@ -2,6 +2,7 @@ package model.dao.impl;
 
 import db.DB;
 import db.DbException;
+import db.DbIntegrityException;
 import model.dao.DepartmentDao;
 import model.entities.Department;
 
@@ -56,6 +57,9 @@ public class DepartmentDaoJDBC implements DepartmentDao {
             pst.setInt(1, id);
             pst.executeUpdate();
         } catch (SQLException e) {
+            if(id==null) {
+                throw new DbIntegrityException("Id: " + id + " not found!");
+            }
             if(e.getErrorCode() == 1451) {
                 throw new DbException("Cannot be deleted: This department has linked sellers");
             }

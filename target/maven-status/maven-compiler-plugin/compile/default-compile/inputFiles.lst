@@ -1,5 +1,4 @@
 /home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/application/Program.java
-/home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/application/Program2.java
 /home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/db/DB.java
 /home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/db/DbException.java
 /home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/db/DbIntegrityException.java
@@ -10,5 +9,5 @@
 /home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/model/dao/impl/SellerDaoJDBC.java
 /home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/model/entities/Department.java
 /home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/model/entities/Seller.java
-/home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/model/service/DepartmentService.java
-/home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/model/service/SellerService.java
+/home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/model/services/DepartmentService.java
+/home/cs1998/Documents/CourseUdemyPOO/Course-of-teacher-Nélio/DAO-in-JDBC/src/main/java/model/services/SellerService.java

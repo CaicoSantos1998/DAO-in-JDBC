@@ -1,14 +1,14 @@
-package model.service;
+package model.services;
 
 import db.DB;
 import db.DbException;
+import db.DbIntegrityException;
 import model.dao.DaoFactory;
 import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 public class SellerService {
@@ -53,7 +53,11 @@ public class SellerService {
     }
 
     public Seller findById(Integer id) {
-        return dao.findById(id);
+        Seller sl = dao.findById(id);
+        if(sl==null) {
+            throw new DbIntegrityException("Id: " + id +" not found!");
+        }
+        return sl;
     }
 
     public List<Seller> findAll() {

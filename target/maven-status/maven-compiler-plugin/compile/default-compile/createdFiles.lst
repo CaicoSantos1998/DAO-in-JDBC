@@ -1,14 +1,13 @@
-model/service/SellerService.class
 db/DbIntegrityException.class
 model/entities/Department.class
+model/services/DepartmentService.class
 model/dao/DaoFactory.class
 db/DB.class
 model/dao/DepartmentDao.class
 db/DbException.class
-model/service/DepartmentService.class
 model/entities/Seller.class
 application/Program.class
 model/dao/impl/DepartmentDaoJDBC.class
-application/Program2.class
+model/services/SellerService.class
 model/dao/SellerDao.class
 model/dao/impl/SellerDaoJDBC.class

@@ -1,4 +1,4 @@
-package model.service;
+package model.services;
 
 import db.DB;
 import db.DbException;
@@ -45,6 +45,9 @@ public class DepartmentService {
     }
 
     public void deleteById(Integer id) {
+        if(dao.findById(id)==null) {
+            throw new DbException("Id: " + id + " not found!");
+        }
         try {
             DB.beginTransaction(conn);
             dao.deleteById(id);
@@ -57,7 +60,11 @@ public class DepartmentService {
     }
 
     public Department findById(Integer id) {
-        return dao.findById(id);
+        Department dep = dao.findById(id);
+        if(dep==null) {
+            throw new DbIntegrityException("Id: " + id + " not found!");
+        }
+        return dep;
     }
 
     public List<Department> findAll() {
