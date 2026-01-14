@@ -1,6 +1,7 @@
 package model.service;
 
 import db.DB;
+import db.DbException;
 import model.dao.DaoFactory;
 import model.dao.DepartmentDao;
 import model.entities.Department;
@@ -14,15 +15,39 @@ public class DepartmentService {
     private DepartmentDao dao = DaoFactory.createDepartmentDao(conn);
 
     public void insert(Department department) {
-        dao.insert(department);
+        try {
+            DB.beginTransaction(conn);
+            dao.insert(department);
+            DB.commit(conn);
+            System.out.println("Done!");
+        } catch (DbException e) {
+            DB.rollback(conn);
+            System.out.println("Error to insert department: " + e.getMessage());
+        }
     }
 
     public void update(Department department) {
-        dao.update(department);
+        try {
+            DB.beginTransaction(conn);
+            dao.update(department);
+            DB.commit(conn);
+            System.out.println("Done!");
+        } catch (DbException e) {
+            DB.rollback(conn);
+            System.out.println("Error to update department: " + e.getMessage());
+        }
     }
 
     public void deleteById(Integer id) {
-        dao.deleteById(id);
+        try {
+            DB.beginTransaction(conn);
+            dao.deleteById(id);
+            DB.commit(conn);
+            System.out.println("Done!");
+        } catch (DbException e) {
+            DB.rollback(conn);
+            System.out.println("Error to delete department: " + e.getMessage());
+        }
     }
 
     public Department findById(Integer id) {

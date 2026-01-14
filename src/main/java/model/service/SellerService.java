@@ -21,6 +21,7 @@ public class SellerService {
             DB.beginTransaction(conn);
             dao.insert(seller);
             DB.commit(conn);
+            System.out.println("Done!");
         } catch (DbException e) {
             DB.rollback(conn);
             System.out.println("Error to save seller!: " + e.getMessage());
@@ -32,6 +33,7 @@ public class SellerService {
             DB.beginTransaction(conn);
             dao.update(seller);
             DB.commit(conn);
+            System.out.println("Done!");
         } catch (DbException e) {
             DB.rollback(conn);
             System.out.println("Error to update seller!: " + e.getMessage());
